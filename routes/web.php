@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\OfferController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/fetch-offers', OfferController::class . '@fetchOffers');
 
 Route::middleware([
     'auth:sanctum',

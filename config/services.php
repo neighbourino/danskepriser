@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'etilbudsavis' => [
+        'api_key' => env('ETILBUDSAVIS_API_KEY'),
+    ],
+
 ];
