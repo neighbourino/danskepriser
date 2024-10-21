@@ -1,26 +1,38 @@
 <?php
 
-namespace App\Models;
+namespace App\Jobs;
 
+use App\Models\Offer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Offer extends Model
+class FetchOffers implements ShouldQueue
 {
-    use HasFactory;
+    use Queueable;
 
-    protected $guarded = [];
+    public $query;
 
-    protected $casts = [
-        'quantity_unit' => 'array',
-        'quantity_pieces' => 'array',
-        'quantity_size' => 'array',
-    ];
+    /**
+     * Create a new job instance.
+     */
+    public function __construct($query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+
+        $this->fetchOffers($this->query);
+    }
 
 
-    private static function fetchOffers($query = null)
+    private function fetchOffers($query = null)
     {
         if (!$query) {
             return false;
@@ -47,6 +59,7 @@ class Offer extends Model
                 'publish' => Carbon::parse($offer['publish'], 'UTC')->toDateTimeString(),
                 'api_store_id' => $offer['dealer']['id'],
                 'store_id' => null,
+                'query' => $query,
             ]);
         }
 

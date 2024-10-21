@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOfferRequest;
 use App\Http\Requests\UpdateOfferRequest;
+use App\Jobs\FetchOffers;
 use App\Models\Offer;
 
 use Illuminate\Support\Facades\Http;
@@ -69,36 +70,53 @@ class OfferController extends Controller
 
     public function fetchOffers()
     {
-        $query = 'pepsi max';
-        $requestUrl = 'https://etilbudsavis.dk/api/squid/v2/offers/search?query=' . $query . '&r_lat=55.695497&r_lng=12.550145&r_radius=20000&r_locale=da_DK&limit=50&offset=0';
 
-        #dd($requestUrl);
-        $response = Http::get($requestUrl);
+        $stapleGoods  = [
+            'mel',
+            'pepsi max',
+            'rødløg',
+            'bananer',
+            'vådservietter'
+        ];
 
-        $data = $response->json();
 
-        #dd($data[0]);
+        foreach ($stapleGoods as $key => $value) {
 
-
-        foreach ($data as $offer) {
-
-            Offer::create([
-                'api_offer_id' => $offer['id'],
-                'offer_heading' => $offer['heading'],
-                'offer_description' => $offer['description'],
-                'price' => $offer['pricing']['price'],
-                'quantity_unit' => $offer['quantity']['unit'],
-                'quantity_size' => $offer['quantity']['size'],
-                'quantity_pieces' => $offer['quantity']['pieces'],
-                'store' => $offer['dealer']['name'],
-                'run_from' => Carbon::parse($offer['run_from'], 'UTC')->toDateTimeString(),
-                'run_till' => Carbon::parse($offer['run_till'], 'UTC')->toDateTimeString(),
-                'publish' => Carbon::parse($offer['publish'], 'UTC')->toDateTimeString(),
-                'api_store_id' => $offer['dealer']['id'],
-                'store_id' => null,
-            ]);
+            FetchOffers::dispatch($value);
         }
 
-        return 'done';
+
+
+
+        // $requestUrl = 'https://etilbudsavis.dk/api/squid/v2/offers/search?query=' . $query . '&r_lat=55.695497&r_lng=12.550145&r_radius=20000&r_locale=da_DK&limit=50&offset=0';
+
+        // #dd($requestUrl);
+        // $response = Http::get($requestUrl);
+
+        // $data = $response->json();
+
+        // #dd($data[0]);
+
+
+        // foreach ($data as $offer) {
+
+        //     Offer::create([
+        //         'api_offer_id' => $offer['id'],
+        //         'offer_heading' => $offer['heading'],
+        //         'offer_description' => $offer['description'],
+        //         'price' => $offer['pricing']['price'],
+        //         'quantity_unit' => $offer['quantity']['unit'],
+        //         'quantity_size' => $offer['quantity']['size'],
+        //         'quantity_pieces' => $offer['quantity']['pieces'],
+        //         'store' => $offer['dealer']['name'],
+        //         'run_from' => Carbon::parse($offer['run_from'], 'UTC')->toDateTimeString(),
+        //         'run_till' => Carbon::parse($offer['run_till'], 'UTC')->toDateTimeString(),
+        //         'publish' => Carbon::parse($offer['publish'], 'UTC')->toDateTimeString(),
+        //         'api_store_id' => $offer['dealer']['id'],
+        //         'store_id' => null,
+        //     ]);
+        // }
+
+        // return 'done';
     }
 }
