@@ -23,4 +23,4 @@ foreach ($stapleGoods as $key => $value) {
 }
 
 // fetch rema1000 prices weekly
-Schedule::job(new FetchPricesForRema1000())->weeklyOn(1, '02:00')->timezone('Europe/Copenhagen')->name('fetch-prices.rema1000');
+Schedule::job(new FetchPricesForRema1000())->weeklyOn(3, '02:00')->timezone('Europe/Copenhagen')->name('fetch-prices.rema1000');
