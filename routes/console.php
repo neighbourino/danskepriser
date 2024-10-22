@@ -1,28 +1,24 @@
 <?php
 
 use App\Jobs\FetchOffers;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
 
+$stapleGoods  = [
+    'mel',
+    'pepsi max',
+    'rødløg',
+    'bananer',
+    'vådservietter',
+    'yoghurt',
+    'ost',
+    'æg'
+];
 
-// fetch offers daily from etilbudsavis
-Schedule::call(function () {
-
-    // TODO: pull from userlist 
-    $stapleGoods  = [
-        'mel',
-        'pepsi max',
-        'rødløg',
-        'bananer',
-        'vådservietter',
-        'yoghurt',
-        'ost',
-        'æg'
-    ];
-
-    foreach ($stapleGoods as $key => $value) {
-        FetchOffers::dispatch($value);
-    }
-})->daily()->at('02:00')->name('fetch-offers');
+foreach ($stapleGoods as $key => $value) {
+    $valueSlug = Str::slug($value);
+    Schedule::job(new FetchOffers($value))->daily()->at('02:00')->timezone('Europe/Copenhagen')->name('fetch-offers.' . $valueSlug);
+}

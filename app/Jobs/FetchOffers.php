@@ -28,11 +28,11 @@ class FetchOffers implements ShouldQueue
     public function handle(): void
     {
 
-        $this->fetchOffers($this->query);
+        $this->fetchOffersFromRemoteApi($this->query);
     }
 
 
-    private function fetchOffers($query = null)
+    private function fetchOffersFromRemoteApi($query = null)
     {
         if (!$query) {
             return false;
