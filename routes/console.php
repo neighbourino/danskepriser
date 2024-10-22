@@ -20,5 +20,5 @@ $stapleGoods  = [
 
 foreach ($stapleGoods as $key => $value) {
     $valueSlug = Str::slug($value);
-    Schedule::job(new FetchOffers($value))->daily()->at('02:00')->timezone('Europe/Copenhagen')->name('fetch-offers.' . $valueSlug);
+    Schedule::job(new FetchOffers($value))->daily()->at('12:15')->timezone('Europe/Copenhagen')->name('fetch-offers.' . $valueSlug);
 }
