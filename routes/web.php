@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,6 +10,8 @@ Route::get('/', function () {
 
 
 Route::get('/fetch-offers', OfferController::class . '@fetchOffers');
+
+Route::get('products/fetch-products-from-api', ProductController::class . '@fetchPrices');
 
 Route::middleware([
     'auth:sanctum',
